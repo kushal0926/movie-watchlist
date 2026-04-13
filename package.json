@@ -4,8 +4,8 @@
   "description": "backend for the movie watchlist api",
   "license": "ISC",
   "author": "moks",
-  "main": "index.js",
   "type": "module",
+  "main": "index.js",
   "scripts": {
     "start": "node src/index.js",
     "dev": "node --watch src/index.js",
@@ -15,14 +15,16 @@
     "fmt:check": "oxfmt --check",
     "prepare": "husky"
   },
+  "dependencies": {
+    "@prisma/client": "^7.7.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1"
+  },
   "devDependencies": {
     "husky": "^9.1.7",
     "oxfmt": "^0.44.0",
-    "oxlint": "^1.59.0"
+    "oxlint": "^1.59.0",
+    "prisma": "^7.7.0"
   },
-  "packageManager": "pnpm@10.33.0",
-  "dependencies": {
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1"
-  }
+  "packageManager": "pnpm@10.33.0"
 }
