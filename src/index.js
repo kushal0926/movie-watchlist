@@ -2,25 +2,29 @@ import express from "express";
 import { config } from "dotenv";
 import healthRoute from "./routes/health.routes.js";
 import { connectDB, disconnectDB } from "./config/database.config.js";
+import authRoute from "./routes/auth.routes.js";
+import { PORT } from "./config/env.config.js";
 
 config({
   quiet: true,
 });
-connectDB()
+connectDB();
 
 const app = express();
 app.use(express.json());
-const port = process.env.PORT;
+app.use(express.urlencoded({ extended: true }));
 
 // routes
-app.use("/api/v1/", healthRoute);
-app.use("/", (_, res) => {
-  res.json({ message: "in the browser" });
-});
+app.use("/v1", healthRoute);
+app.use("/v1/auth", authRoute);
+
+// app.use("/", (_, res) => {
+//   res.json({ message: "in the browser" });
+// });
 
 // running the server
-const server = app.listen(port, () => {
-  console.log(`server is running on http://localhost:${port}`);
+const server = app.listen(PORT, () => {
+  console.log(`server is running on http://localhost:${PORT}`);
 });
 
 export default app;

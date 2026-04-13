@@ -1,17 +1,18 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import { DATABASE_URL, NODE_ENV } from "./env.config.js";
+
+const adapter = new PrismaPg({ connectionString: DATABASE_URL });
 
 const prisma = new PrismaClient({
-  log:
-    process.env.NODE_ENV === "development"
-      ? ["query", "error", "warn"]
-      : ["error"],
+  adapter,
+  log: NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
 });
-
 
 const connectDB = async () => {
   try {
     await prisma.$connect();
-    console.lgo("database is connected");
+    console.log("database is connected successfully");
   } catch (error) {
     console.error(`database connection error: ${error.message}`);
     process.exit(1);
