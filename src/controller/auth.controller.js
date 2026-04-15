@@ -63,18 +63,14 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res
-        .status(httpStatus.UNAUTHORIZED)
-        .json({ error: "invalid email or password." });
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: "invalid email or password." });
     }
 
     // verifying password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res
-        .status(httpStatus.UNAUTHORIZED)
-        .json({ error: "invalid email or password." });
+      return res.status(httpStatus.UNAUTHORIZED).json({ error: "invalid email or password." });
     }
 
     // generate json webtoken

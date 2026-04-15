@@ -7,7 +7,4 @@ authRoute.post("/request", request);
 authRoute.post("/login", login);
 authRoute.post("/logout", logout);
 
-
-
-
 export default authRoute;
