@@ -14,8 +14,7 @@ const movies = [
   },
   {
     title: "Inception",
-    overview:
-      "A thief who steals corporate secrets through dream-sharing technology.",
+    overview: "A thief who steals corporate secrets through dream-sharing technology.",
     releaseYear: 2010,
     genres: ["Action", "Sci-Fi", "Thriller"],
     runtime: 148,
@@ -80,8 +79,7 @@ const movies = [
   },
   {
     title: "The Godfather",
-    overview:
-      "The aging patriarch of an organized crime dynasty transfers control to his son.",
+    overview: "The aging patriarch of an organized crime dynasty transfers control to his son.",
     releaseYear: 1972,
     genres: ["Crime", "Drama"],
     runtime: 175,

@@ -4,6 +4,8 @@ import healthRoute from "./routes/health.routes.js";
 import { connectDB, disconnectDB } from "./config/database.config.js";
 import authRoute from "./routes/auth.routes.js";
 import { PORT } from "./config/env.config.js";
+import movieRoute from "./routes/movie.routes.js";
+import watchlistRoute from "./routes/watchlist.routes.js";
 
 config({
   quiet: true,
@@ -17,6 +19,8 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use("/v1", healthRoute);
 app.use("/v1/auth", authRoute);
+app.use("/v1/movie", movieRoute);
+app.use("/v1/watchlist", watchlistRoute);
 
 // app.use("/", (_, res) => {
 //   res.json({ message: "in the browser" });

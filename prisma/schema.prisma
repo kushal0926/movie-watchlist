@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 datasource db {
@@ -8,12 +8,12 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  createdAt      DateTime         @default(now())
-  
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
   movies         Movie[]          @relation("MovieCreator")
   watchlistItems WatchlistItems[]
 }
@@ -43,9 +43,11 @@ model WatchlistItems {
   createdAt DateTime        @default(now())
   updatedAt DateTime        @default(now())
 
-  // establishing relations 
+  // establishing relations
   user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   movie Movie @relation(fields: [movieId], references: [id])
+
+  @@unique([userId, movieId])
 }
 
 enum WatchlistStatus {
