@@ -53,7 +53,94 @@ const addToWatchList = async (req, res) => {
       .json({ status: "success", data: { watchlistItem } });
   } catch (error) {
     console.log(error);
+    return res
+      .status(httpStatus.UNAUTHORIZED)
+      .json({ error: "invalid request" });
   }
 };
 
-export { addToWatchList };
+const updateWatchlist = async (req, res) => {
+  try {
+    const { status, rating, notes } = req.body;
+
+    // Find watchlist item and verify ownership
+    const watchlistItem = await prisma.watchlistItems.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!watchlistItem) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: "watchlist item not found" });
+    }
+
+    // Ensure only owner can update
+    if (watchlistItem.userId !== req.user.id) {
+      return res
+        .status(httpStatus.FORBIDDEN)
+        .json({ error: "not allowed to update this watchlist item" });
+    }
+
+    // Build update data
+    const updateData = {};
+    if (status !== undefined) updateData.status = status.toUpperCase();
+    if (rating !== undefined) updateData.rating = rating;
+    if (notes !== undefined) updateData.notes = notes;
+
+    // Update watchlist item
+    const updatedItem = await prisma.watchlistItems.update({
+      where: { id: req.params.id },
+      data: updateData,
+    });
+
+    res.status(httpStatus.OK).json({
+      status: "success",
+      data: {
+        watchlistItem: updatedItem,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(httpStatus.UNAUTHORIZED)
+      .json({ error: "cannot updtae the list" });
+  }
+};
+
+const deleteFromWatchlist = async (req, res) => {
+  try {
+    // Find watchlist item and verify ownership
+    const watchlistItem = await prisma.watchlistItems.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!watchlistItem) {
+      return res
+        .status(httpStatus.NOT_FOUND)
+        .json({ error: "Watchlist item not found" });
+    }
+
+    // Ensure only owner can delete
+    if (watchlistItem.userId !== req.user.id) {
+      return res
+        .status(httpStatus.FORBIDDEN)
+        .json({ error: "Not allowed to update this watchlist item" });
+    }
+
+    await prisma.watchlistItems.delete({
+      where: { id: req.params.id },
+    });
+
+    res.status(httpStatus.OK).json({
+      status: "success",
+      message: "Movie removed from watchlist",
+    });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(httpStatus.UNAUTHORIZED)
+      .json({ error: "cannot delete the selected item" });
+  }
+};
+
+export { addToWatchList, updateWatchlist, deleteFromWatchlist };

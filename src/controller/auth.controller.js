@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import generateToken from "../utils/generateToken.js";
 
 // for sign ups
-const request = async (req, res) => {
+const signUp = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
@@ -54,7 +54,7 @@ const request = async (req, res) => {
 };
 
 // for sign ins
-const login = async (req, res) => {
+const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -63,14 +63,18 @@ const login = async (req, res) => {
     });
 
     if (!user) {
-      return res.status(httpStatus.UNAUTHORIZED).json({ error: "invalid email or password." });
+      return res
+        .status(httpStatus.UNAUTHORIZED)
+        .json({ error: "invalid email or password." });
     }
 
     // verifying password
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(httpStatus.UNAUTHORIZED).json({ error: "invalid email or password." });
+      return res
+        .status(httpStatus.UNAUTHORIZED)
+        .json({ error: "invalid email or password." });
     }
 
     // generate json webtoken
@@ -89,7 +93,7 @@ const login = async (req, res) => {
   }
 };
 
-const logout = (req, res) => {
+const signOut = (req, res) => {
   res.cookie("jwt", "", {
     httpOnly: true,
     expires: new Date(0),
@@ -101,4 +105,4 @@ const logout = (req, res) => {
   });
 };
 
-export { request, login, logout };
+export { signIn, signUp, signOut };
